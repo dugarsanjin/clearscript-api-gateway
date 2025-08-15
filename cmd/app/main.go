@@ -2,7 +2,13 @@ package main
 
 import (
 	"clearscript-api-gateway/internal/config"
+	contentGet "clearscript-api-gateway/internal/http/handlers/content/get"
+	userGet "clearscript-api-gateway/internal/http/handlers/user/get"
+	mwLogger "clearscript-api-gateway/internal/http/middleware/logger"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"log/slog"
+	"net/http"
 	"os"
 )
 
@@ -20,8 +26,29 @@ func main() {
 
 	log.Info("starting clearscript-api-gateway", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
-	// todo init router (chi, "chi render")
-	// todo run server
+
+	router := chi.NewRouter()
+	router.Use(middleware.RequestID)
+	router.Use(mwLogger.New(log))
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
+
+	router.Get("/api/v1/users/{id}", userGet.New(log))
+	router.Get("/api/v1/lessons/{id}", contentGet.New(log))
+
+	log.Info("starting server", slog.String("address", cfg.HTTPServer.Address))
+
+	srv := &http.Server{
+		Addr:         cfg.HTTPServer.Address,
+		Handler:      router,
+		ReadTimeout:  cfg.HTTPServer.Timeout,
+		WriteTimeout: cfg.HTTPServer.Timeout,
+		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
+		log.Error("failed to start server", slog.String("address", cfg.HTTPServer.Address))
+	}
 }
 
 func setupLogger(env string) *slog.Logger {
