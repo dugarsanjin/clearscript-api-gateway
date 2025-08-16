@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/lessons/{id}": {
+        "/api/v1/lessons/{id}": {
             "get": {
                 "description": "Retrieve lesson content by lesson ID",
                 "consumes": [
@@ -65,7 +65,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "Retrieve user information by user ID",
                 "consumes": [
@@ -205,8 +205,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "/api/v1",
+	Host:             "",
+	BasePath:         "/clearscript-api-gateway",
 	Schemes:          []string{"http", "https"},
 	Title:            "ClearScript API Gateway",
 	Description:      "This is a Go-based API gateway for ClearScript application.",

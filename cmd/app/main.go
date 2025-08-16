@@ -12,8 +12,7 @@
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 //
-// @host      localhost:8080
-// @BasePath  /api/v1
+// @BasePath  /clearscript-api-gateway
 //
 // @schemes   http https
 package main
@@ -24,6 +23,7 @@ import (
 	contentGet "clearscript-api-gateway/internal/http/handlers/content/get"
 	userGet "clearscript-api-gateway/internal/http/handlers/user/get"
 	mwLogger "clearscript-api-gateway/internal/http/middleware/logger"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -53,13 +53,17 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 
-	router.Get("/api/v1/users/{id}", userGet.New(log))
-	router.Get("/api/v1/lessons/{id}", contentGet.New(log))
+	swaggerURL := fmt.Sprintf("http://%s/clearscript-api-gateway/swagger/doc.json", cfg.HTTPServer.Address)
 
-	// Swagger endpoint
-	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
-	))
+	router.Route("/clearscript-api-gateway", func(r chi.Router) {
+		// API v1
+		r.Get("/api/v1/users/{id}", userGet.New(log))
+		r.Get("/api/v1/lessons/{id}", contentGet.New(log))
+
+		// Swagger documentation
+		r.Get("/swagger/*", httpSwagger.Handler(
+			httpSwagger.URL(swaggerURL)))
+	})
 
 	log.Info("starting server", slog.String("address", cfg.HTTPServer.Address))
 

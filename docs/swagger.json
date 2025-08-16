@@ -19,10 +19,9 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
-    "basePath": "/api/v1",
+    "basePath": "/clearscript-api-gateway",
     "paths": {
-        "/lessons/{id}": {
+        "/api/v1/lessons/{id}": {
             "get": {
                 "description": "Retrieve lesson content by lesson ID",
                 "consumes": [
@@ -63,7 +62,7 @@
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "Retrieve user information by user ID",
                 "consumes": [

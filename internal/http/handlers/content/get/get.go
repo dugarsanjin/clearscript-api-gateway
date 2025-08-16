@@ -41,7 +41,7 @@ type Author struct {
 // @Param        id   path      string  true  "Lesson ID"
 // @Success      200  {object}  Response
 // @Failure      400  {object}  map[string]string
-// @Router       /lessons/{id} [get]
+// @Router       /api/v1/lessons/{id} [get]
 func New(log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "handlers.content.get.New"

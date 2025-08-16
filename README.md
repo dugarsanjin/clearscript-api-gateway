@@ -53,6 +53,6 @@ swag init -g cmd/app/main.go
 go install github.com/swaggo/swag/cmd/swag@latest
 
 # Access Swagger UI (when server is running)
-# http://localhost:8080/swagger/index.html
+# http://localhost:8080/clearscript-api-gateway/swagger/index.html
 ```
 

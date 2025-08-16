@@ -30,7 +30,7 @@ type Permission struct {
 // @Param        id   path      string  true  "User ID"
 // @Success      200  {object}  Response
 // @Failure      400  {object}  map[string]string
-// @Router       /users/{id} [get]
+// @Router       /api/v1/users/{id} [get]
 func New(log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "handlers.user.get.New"
