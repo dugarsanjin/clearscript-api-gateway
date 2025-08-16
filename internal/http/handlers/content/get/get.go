@@ -74,10 +74,10 @@ func getMockResponse(contentId string) Response {
 		ID:    contentId,
 		Title: "Sample ClearScript Content",
 		Letter: Letter{
-			Initial:         "𐤀",
-			Medial:          "𐤀",
-			Final:           "𐤀",
-			Transliteration: "aleph",
+			Initial:         "ᠠ",
+			Medial:          "ᠢ",
+			Final:           "ᠡ",
+			Transliteration: "A",
 		},
 		Description: "This is a sample content description for ClearScript learning materials",
 		Author: Author{
