@@ -56,3 +56,33 @@ go install github.com/swaggo/swag/cmd/swag@latest
 # http://localhost:8080/clearscript-api-gateway/swagger/index.html
 ```
 
+### Docker Commands
+```bash
+# Build Docker image
+docker build -t clearscript-api-gateway .
+
+# Run with Docker
+docker run -p 8080:8080 -e CONFIG_PATH=/root/config/local.yml clearscript-api-gateway
+
+# Using docker-compose (recommended)
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f clearscript-api-gateway
+
+# Rebuild and restart
+docker-compose up --build -d
+
+# Different environments:
+# Local development (default)
+docker-compose up -d
+
+# Development environment  
+CONFIG_PATH=/root/config/dev.yml docker-compose up -d
+
+# Production with external config
+CONFIG_PATH=/root/config/prod.yml HOST_CONFIG_PATH=/etc/clearscript/config docker-compose up -d
+```

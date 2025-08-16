@@ -23,7 +23,6 @@ import (
 	contentGet "clearscript-api-gateway/internal/http/handlers/content/get"
 	userGet "clearscript-api-gateway/internal/http/handlers/user/get"
 	mwLogger "clearscript-api-gateway/internal/http/middleware/logger"
-	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -53,16 +52,13 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 
-	swaggerURL := fmt.Sprintf("http://%s/clearscript-api-gateway/swagger/doc.json", cfg.HTTPServer.Address)
-
 	router.Route("/clearscript-api-gateway", func(r chi.Router) {
 		// API v1
 		r.Get("/api/v1/users/{id}", userGet.New(log))
 		r.Get("/api/v1/lessons/{id}", contentGet.New(log))
 
 		// Swagger documentation
-		r.Get("/swagger/*", httpSwagger.Handler(
-			httpSwagger.URL(swaggerURL)))
+		r.Get("/swagger/*", httpSwagger.Handler())
 	})
 
 	log.Info("starting server", slog.String("address", cfg.HTTPServer.Address))
