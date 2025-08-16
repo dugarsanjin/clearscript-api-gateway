@@ -1,12 +1,32 @@
+// Package main provides the entry point for the ClearScript API Gateway.
+//
+// @title           ClearScript API Gateway
+// @version         1.0
+// @description     This is a Go-based API gateway for ClearScript application.
+// @termsOfService  http://swagger.io/terms/
+//
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+//
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+//
+// @host      localhost:8080
+// @BasePath  /api/v1
+//
+// @schemes   http https
 package main
 
 import (
+	_ "clearscript-api-gateway/docs"
 	"clearscript-api-gateway/internal/config"
 	contentGet "clearscript-api-gateway/internal/http/handlers/content/get"
 	userGet "clearscript-api-gateway/internal/http/handlers/user/get"
 	mwLogger "clearscript-api-gateway/internal/http/middleware/logger"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"log/slog"
 	"net/http"
 	"os"
@@ -35,6 +55,11 @@ func main() {
 
 	router.Get("/api/v1/users/{id}", userGet.New(log))
 	router.Get("/api/v1/lessons/{id}", contentGet.New(log))
+
+	// Swagger endpoint
+	router.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
+	))
 
 	log.Info("starting server", slog.String("address", cfg.HTTPServer.Address))
 

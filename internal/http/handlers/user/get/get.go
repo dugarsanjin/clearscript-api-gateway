@@ -21,6 +21,16 @@ type Permission struct {
 	Actions []string `json:"actions"`
 }
 
+// GetUser godoc
+// @Summary      Get user by ID
+// @Description  Retrieve user information by user ID
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "User ID"
+// @Success      200  {object}  Response
+// @Failure      400  {object}  map[string]string
+// @Router       /users/{id} [get]
 func New(log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "handlers.user.get.New"

@@ -32,6 +32,16 @@ type Author struct {
 	Email    string `json:"email"`
 }
 
+// GetLesson godoc
+// @Summary      Get lesson by ID
+// @Description  Retrieve lesson content by lesson ID
+// @Tags         lessons
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Lesson ID"
+// @Success      200  {object}  Response
+// @Failure      400  {object}  map[string]string
+// @Router       /lessons/{id} [get]
 func New(log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "handlers.content.get.New"
