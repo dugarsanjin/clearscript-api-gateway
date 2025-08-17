@@ -1,0 +1,58 @@
+name: Deploy ClearScript API Gateway
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Триггер на теги вида v1.0.0, v1.2.3
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          # Переходим в директорию проекта (создаем если нет)
+          mkdir -p /home/evgenii/projects/clearscript/clearscript-api-gateway
+          cd /home/evgenii/projects/clearscript/clearscript-api-gateway
+          
+          # Клонируем или обновляем репозиторий
+          if [ -d ".git" ]; then
+            echo "Updating existing repository..."
+            git fetch --tags
+            git checkout ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }}
+          else
+            echo "Cloning repository..."
+            git clone ${{ github.server_url }}/${{ github.repository }} .
+            git checkout ${{ github.ref_name }}
+          fi
+          
+          # Создаем .env файл для development  
+          cat > .env << EOF
+          CONFIG_PATH=/root/config/dev.yml
+          HOST_CONFIG_PATH=${{ secrets.HOST_CONFIG_PATH }}
+          APP_VERSION=${{ github.ref_name }}
+          EOF
+          
+          # Останавливаем старые контейнеры
+          docker-compose down || true
+          
+          # Собираем и запускаем новые контейнеры
+          docker-compose up --build -d
+          
+          # Ждем запуска и проверяем
+          sleep 10
+          echo "Checking service status..."
+          docker-compose ps
+          
+          # Проверяем health check
+          echo "Testing health endpoint..."
+          curl -f http://localhost:8080/clearscript-api-gateway/health || echo "Service might still be starting up"
+          
+          echo "Deployment completed! Tag: ${{ github.ref_name }}"
