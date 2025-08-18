@@ -2,6 +2,8 @@ name: Deploy ClearScript API Gateway
 
 on:
   push:
+    branches:
+      - trunk # Триггер на пуши в ветку trunk
     tags:
       - 'v*.*.*'  # Триггер на теги вида v1.0.0, v1.2.3
 
@@ -37,8 +39,11 @@ jobs:
             git pull origin ${{ github.ref_name }}
           else
             echo "Cloning repository..."
-            # Очищаем папку если она не пустая
-            rm -rf * .*git* 2>/dev/null || true
+            # Полностью очищаем папку
+            cd ..
+            rm -rf clearscript-api-gateway
+            mkdir clearscript-api-gateway
+            cd clearscript-api-gateway
             git clone ${{ github.server_url }}/${{ github.repository }} .
             git checkout ${{ github.ref_name }}
           fi
