@@ -18,10 +18,11 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          # Устанавливаем Git если его нет
+          # Проверяем что Git установлен
           if ! command -v git &> /dev/null; then
-            echo "Installing Git..."
-            apt update && apt install -y git
+            echo "ERROR: Git is not installed. Please install it manually:"
+            echo "ssh to server and run: apt update && apt install -y git"
+            exit 1
           fi
           
           # Переходим в директорию проекта (создаем если нет)
@@ -36,6 +37,8 @@ jobs:
             git pull origin ${{ github.ref_name }}
           else
             echo "Cloning repository..."
+            # Очищаем папку если она не пустая
+            rm -rf * .*git* 2>/dev/null || true
             git clone ${{ github.server_url }}/${{ github.repository }} .
             git checkout ${{ github.ref_name }}
           fi
