@@ -18,6 +18,12 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
+          # Устанавливаем Git если его нет
+          if ! command -v git &> /dev/null; then
+            echo "Installing Git..."
+            apt update && apt install -y git
+          fi
+          
           # Переходим в директорию проекта (создаем если нет)
           mkdir -p /home/evgenii/projects/clearscript/clearscript-api-gateway
           cd /home/evgenii/projects/clearscript/clearscript-api-gateway
