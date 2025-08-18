@@ -22,8 +22,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/app
 # Final stage
 FROM alpine:latest
 
-# Install ca-certificates for HTTPS requests
-RUN apk --no-cache add ca-certificates
+# Update package index and install ca-certificates for HTTPS requests
+RUN apk update && apk --no-cache add ca-certificates && rm -rf /var/cache/apk/*
 
 # Create app directory
 WORKDIR /root/
