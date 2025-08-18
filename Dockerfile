@@ -10,7 +10,9 @@ WORKDIR /app
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
-# Download dependencies
+# Set Go proxy settings and download dependencies
+ENV GOPROXY=direct
+ENV GOSUMDB=off
 RUN go mod download
 
 # Copy source code
