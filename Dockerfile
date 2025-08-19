@@ -1,8 +1,11 @@
 # Build stage
-FROM golang:1.24-alpine AS builder
+FROM golang:1.24-bullseye AS builder
 
 # Install git and ca-certificates (needed for go mod download)
-RUN apk update && apk add --no-cache git ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -20,10 +23,12 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/app
 
 # Final stage  
-FROM scratch
+FROM debian:bullseye-slim
 
-# Copy ca-certificates from builder stage
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# Install ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the binary from builder stage
 COPY --from=builder /app/main .
