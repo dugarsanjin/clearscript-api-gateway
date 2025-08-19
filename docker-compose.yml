@@ -11,5 +11,8 @@ services:
     volumes:
       # Конфиги: локальные или внешние через переменную окружения
       - ${HOST_CONFIG_PATH:-./config}:/root/config:ro
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     restart: unless-stopped
     container_name: clearscript-api-gateway

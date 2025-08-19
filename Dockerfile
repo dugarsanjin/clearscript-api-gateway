@@ -1,8 +1,8 @@
 # Build stage
 FROM golang:1.24-alpine AS builder
 
-# Install ca-certificates (needed for go mod download)
-RUN apk add --no-cache ca-certificates
+# Install git and ca-certificates (needed for go mod download)
+RUN apk update && apk add --no-cache git ca-certificates
 
 # Set working directory
 WORKDIR /app
@@ -10,9 +10,7 @@ WORKDIR /app
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
-# Set Go proxy settings and download dependencies
-ENV GOPROXY=direct
-ENV GOSUMDB=off
+# Download dependencies (using default Go proxy)
 RUN go mod download
 
 # Copy source code
