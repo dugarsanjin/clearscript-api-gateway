@@ -1,11 +1,5 @@
 # Build stage
-FROM golang:1.24-bullseye AS builder
-
-# Install git and ca-certificates (needed for go mod download)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+FROM golang:1.24 AS builder
 
 # Set working directory
 WORKDIR /app
@@ -23,18 +17,13 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/app
 
 # Final stage  
-FROM debian:bullseye-slim
-
-# Install ca-certificates
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+FROM gcr.io/distroless/static-debian11
 
 # Copy the binary from builder stage
-COPY --from=builder /app/main .
+COPY --from=builder /app/main /main
 
 # Expose port
 EXPOSE 8080
 
 # Run the binary
-CMD ["./main"]
+ENTRYPOINT ["/main"]
