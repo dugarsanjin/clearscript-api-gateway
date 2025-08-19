@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
-# Download dependencies (using default Go proxy)
+# Download dependencies
 RUN go mod download
 
 # Copy source code
