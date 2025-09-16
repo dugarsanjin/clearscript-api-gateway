@@ -50,7 +50,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_http_handlers_content_get.Response"
+                            "$ref": "#/definitions/handlers.ContentGetResponse"
                         }
                     },
                     "400": {
@@ -91,7 +91,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_http_handlers_user_get.Response"
+                            "$ref": "#/definitions/handlers.UserGetResponse"
                         }
                     },
                     "400": {
@@ -108,7 +108,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "get.Author": {
+        "handlers.Author": {
             "type": "object",
             "properties": {
                 "email": {
@@ -122,7 +122,33 @@ const docTemplate = `{
                 }
             }
         },
-        "get.Letter": {
+        "handlers.ContentGetResponse": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/handlers.Author"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "letter": {
+                    "$ref": "#/definitions/handlers.Letter"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.Letter": {
             "type": "object",
             "properties": {
                 "final": {
@@ -139,7 +165,7 @@ const docTemplate = `{
                 }
             }
         },
-        "get.Permission": {
+        "handlers.Permission": {
             "type": "object",
             "properties": {
                 "actions": {
@@ -153,33 +179,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_http_handlers_content_get.Response": {
-            "type": "object",
-            "properties": {
-                "author": {
-                    "$ref": "#/definitions/get.Author"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "letter": {
-                    "$ref": "#/definitions/get.Letter"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_http_handlers_user_get.Response": {
+        "handlers.UserGetResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -194,7 +194,7 @@ const docTemplate = `{
                 "permissions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/get.Permission"
+                        "$ref": "#/definitions/handlers.Permission"
                     }
                 }
             }

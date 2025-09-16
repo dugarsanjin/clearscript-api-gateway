@@ -12,6 +12,9 @@ This is a Go-based API gateway called `clearscript-api-gateway`. The project fol
 - **Entry Point**: `cmd/app/main.go` - Sets up HTTP server with Chi router, logging, and middleware
 - **Configuration**: `internal/config/config.go` - Uses cleanenv for YAML/environment variable configuration  
 - **HTTP Layer**: `internal/http/` - Contains handlers and middleware
+  - **Handlers**: Structured handlers in `internal/http/handlers/` using handler pattern with methods returning `http.HandlerFunc`
+  - **User Handler**: `internal/http/handlers/user.go` - User-related endpoints
+  - **Content Handler**: `internal/http/handlers/content.go` - Lesson content endpoints
 - **Middleware**: Custom logging middleware in `internal/http/middleware/logger/`
 
 ### Configuration System
@@ -135,10 +138,11 @@ The project includes Swagger/OpenAPI documentation:
   - `GET /api/v1/lessons/{id}` - Retrieve lesson content
 
 ## Development Notes
-- Server implementation is incomplete (marked with TODO in main.go:33)
-- User handler is currently empty (internal/http/handlers/url/user/user.go)
+- Handler architecture uses structured approach: each resource has its own handler struct with methods returning `http.HandlerFunc`
+- Response types are prefixed with resource name (e.g., `UserGetResponse`, `ContentGetResponse`) to avoid naming conflicts
+- Mock responses are implemented for all endpoints during development
 - No tests are currently present in the codebase
-- Swagger documentation is auto-generated from code annotations
+- Swagger documentation is auto-generated from code annotations in handler methods
 
 ## Docker Configuration Notes
 - **Important**: For Docker deployment, use `address: "0.0.0.0:8080"` in config files (not `localhost:8080`)

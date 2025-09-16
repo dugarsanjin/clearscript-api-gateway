@@ -20,9 +20,7 @@ package main
 import (
 	_ "clearscript-api-gateway/docs"
 	"clearscript-api-gateway/internal/config"
-	contentGet "clearscript-api-gateway/internal/http/handlers/content/get"
-	"clearscript-api-gateway/internal/http/handlers/health"
-	userGet "clearscript-api-gateway/internal/http/handlers/user/get"
+	"clearscript-api-gateway/internal/http/handlers"
 	mwLogger "clearscript-api-gateway/internal/http/middleware/logger"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -53,13 +51,16 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 
+	userHandler := handlers.NewUserHandler(log)
+	contentHandler := handlers.NewContentHandler(log)
+
 	router.Route("/clearscript-api-gateway", func(r chi.Router) {
 		// Health check
-		r.Get("/health", health.New(log))
+		r.Get("/health", handlers.New(log))
 
 		// API v1
-		r.Get("/api/v1/users/{id}", userGet.New(log))
-		r.Get("/api/v1/lessons/{id}", contentGet.New(log))
+		r.Get("/api/v1/users/{id}", userHandler.Get())
+		r.Get("/api/v1/lessons/{id}", contentHandler.Get())
 
 		// Swagger documentation
 		r.Get("/swagger/*", httpSwagger.Handler())

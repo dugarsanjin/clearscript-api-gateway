@@ -1,4 +1,4 @@
-package get
+package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
@@ -8,8 +8,12 @@ import (
 	"net/http"
 )
 
-// Response todo add status and error fields
-type Response struct {
+type UserHandler struct {
+	log *slog.Logger
+}
+
+// UserGetResponse todo add status and error fields
+type UserGetResponse struct {
 	ID          string       `json:"id"`
 	FullName    string       `json:"fullName"`
 	Email       string       `json:"email"`
@@ -21,21 +25,25 @@ type Permission struct {
 	Actions []string `json:"actions"`
 }
 
-// GetUser godoc
+func NewUserHandler(log *slog.Logger) *UserHandler {
+	return &UserHandler{log: log}
+}
+
+// Get godoc
 // @Summary      Get user by ID
 // @Description  Retrieve user information by user ID
 // @Tags         users
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "User ID"
-// @Success      200  {object}  Response
+// @Success      200  {object}  UserGetResponse
 // @Failure      400  {object}  map[string]string
 // @Router       /api/v1/users/{id} [get]
-func New(log *slog.Logger) http.HandlerFunc {
+func (h *UserHandler) Get() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const op = "handlers.user.get.New"
+		const op = "handlers.user.Get"
 
-		log = log.With(
+		log := h.log.With(
 			slog.String("op", op),
 			slog.String("request_id", middleware.GetReqID(r.Context())),
 		)
@@ -56,8 +64,8 @@ func New(log *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func getMockResponse(userId string) Response {
-	return Response{
+func getMockResponse(userId string) UserGetResponse {
+	return UserGetResponse{
 		ID:       userId,
 		FullName: "John Doe",
 		Email:    "john.doe@example.com",

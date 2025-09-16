@@ -1,4 +1,4 @@
-package get
+package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
@@ -9,7 +9,11 @@ import (
 	"time"
 )
 
-type Response struct {
+type ContentHandler struct {
+	log *slog.Logger
+}
+
+type ContentGetResponse struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`
 	Letter      Letter `json:"letter"`
@@ -32,21 +36,25 @@ type Author struct {
 	Email    string `json:"email"`
 }
 
-// GetLesson godoc
+func NewContentHandler(log *slog.Logger) *ContentHandler {
+	return &ContentHandler{log: log}
+}
+
+// Get godoc
 // @Summary      Get lesson by ID
 // @Description  Retrieve lesson content by lesson ID
 // @Tags         lessons
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Lesson ID"
-// @Success      200  {object}  Response
+// @Success      200  {object}  ContentGetResponse
 // @Failure      400  {object}  map[string]string
 // @Router       /api/v1/lessons/{id} [get]
-func New(log *slog.Logger) http.HandlerFunc {
+func (h *ContentHandler) Get() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const op = "handlers.content.get.New"
+		const op = "handlers.content.Get"
 
-		log = log.With(
+		log := h.log.With(
 			slog.String("op", op),
 			slog.String("request_id", middleware.GetReqID(r.Context())),
 		)
@@ -60,17 +68,17 @@ func New(log *slog.Logger) http.HandlerFunc {
 		}
 
 		// Mock response data
-		response := getMockResponse(contentId)
+		response := getContentMockResponse(contentId)
 
 		log.Info("content retrieved", slog.String("content_id", contentId))
 		render.JSON(w, r, response)
 	}
 }
 
-func getMockResponse(contentId string) Response {
+func getContentMockResponse(contentId string) ContentGetResponse {
 	now := time.Now().Format(time.RFC3339)
 
-	return Response{
+	return ContentGetResponse{
 		ID:    contentId,
 		Title: "Sample ClearScript Content",
 		Letter: Letter{
