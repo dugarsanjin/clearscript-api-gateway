@@ -1,3 +1,4 @@
+basePath: /clearscript-api-gateway
 definitions:
   handlers.Author:
     properties:
@@ -163,4 +164,7 @@ paths:
       summary: Get user by ID
       tags:
       - users
+schemes:
+- http
+- https
 swagger: "2.0"

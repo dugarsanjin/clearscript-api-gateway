@@ -1,4 +1,8 @@
 {
+    "schemes": [
+        "http",
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "This is a Go-based API gateway for ClearScript application.",
@@ -15,6 +19,7 @@
         },
         "version": "1.0"
     },
+    "basePath": "/clearscript-api-gateway",
     "paths": {
         "/api/v1/compare": {
             "post": {
