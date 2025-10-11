@@ -24,6 +24,54 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/compare": {
+            "post": {
+                "description": "Compare the uploaded input file against the provided template and return similarity score",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "compare"
+                ],
+                "summary": "Compare input file with template",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Template file",
+                        "name": "template",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Input file to compare",
+                        "name": "input",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CompareResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/lessons/{id}": {
             "get": {
                 "description": "Retrieve lesson content by lesson ID",
@@ -119,6 +167,14 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "string"
+                }
+            }
+        },
+        "handlers.CompareResponse": {
+            "type": "object",
+            "properties": {
+                "similarity": {
+                    "type": "number"
                 }
             }
         },

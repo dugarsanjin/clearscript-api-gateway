@@ -53,6 +53,7 @@ func main() {
 
 	userHandler := handlers.NewUserHandler(log)
 	contentHandler := handlers.NewContentHandler(log)
+	compareHandler := handlers.NewCompareHandler(log)
 
 	router.Route("/clearscript-api-gateway", func(r chi.Router) {
 		// Health check
@@ -61,6 +62,7 @@ func main() {
 		// API v1
 		r.Get("/api/v1/users/{id}", userHandler.Get())
 		r.Get("/api/v1/lessons/{id}", contentHandler.Get())
+		r.Post("/api/v1/compare", compareHandler.Post())
 
 		// Swagger documentation
 		r.Get("/swagger/*", httpSwagger.Handler())

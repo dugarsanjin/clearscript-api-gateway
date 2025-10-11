@@ -9,6 +9,11 @@ definitions:
       id:
         type: string
     type: object
+  handlers.CompareResponse:
+    properties:
+      similarity:
+        type: number
+    type: object
   handlers.ContentGetResponse:
     properties:
       author:
@@ -72,6 +77,39 @@ info:
   title: ClearScript API Gateway
   version: "1.0"
 paths:
+  /api/v1/compare:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Compare the uploaded input file against the provided template and
+        return similarity score
+      parameters:
+      - description: Template file
+        in: formData
+        name: template
+        required: true
+        type: file
+      - description: Input file to compare
+        in: formData
+        name: input
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CompareResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Compare input file with template
+      tags:
+      - compare
   /api/v1/lessons/{id}:
     get:
       consumes:

@@ -15,6 +15,7 @@ This is a Go-based API gateway called `clearscript-api-gateway`. The project fol
   - **Handlers**: Structured handlers in `internal/http/handlers/` using handler pattern with methods returning `http.HandlerFunc`
   - **User Handler**: `internal/http/handlers/user.go` - User-related endpoints
   - **Content Handler**: `internal/http/handlers/content.go` - Lesson content endpoints
+  - **Compare Handler**: `internal/http/handlers/compare.go` - File comparison endpoints
 - **Middleware**: Custom logging middleware in `internal/http/middleware/logger/`
 
 ### Configuration System
@@ -136,6 +137,7 @@ The project includes Swagger/OpenAPI documentation:
 - **Endpoints**: 
   - `GET /api/v1/users/{id}` - Retrieve user information
   - `GET /api/v1/lessons/{id}` - Retrieve lesson content
+  - `POST /api/v1/compare` - Compare two image files (multipart/form-data)
 
 ## Development Notes
 - Handler architecture uses structured approach: each resource has its own handler struct with methods returning `http.HandlerFunc`
