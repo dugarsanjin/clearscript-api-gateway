@@ -12,7 +12,7 @@
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 //
-// @BasePath  /clearscript-api-gateway
+// @BasePath  /
 //
 // @schemes   http https
 package main
@@ -57,7 +57,7 @@ func main() {
 	contentHandler := handlers.NewContentHandler(log)
 	compareHandler := handlers.NewCompareHandler(log)
 
-	router.Route("/clearscript-api-gateway", func(r chi.Router) {
+	router.Route("/", func(r chi.Router) {
 		// Health check
 		r.Get("/health", handlers.New(log))
 

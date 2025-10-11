@@ -19,7 +19,7 @@
         },
         "version": "1.0"
     },
-    "basePath": "/clearscript-api-gateway",
+    "basePath": "/",
     "paths": {
         "/api/v1/compare": {
             "post": {

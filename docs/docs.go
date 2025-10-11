@@ -262,7 +262,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/clearscript-api-gateway",
+	BasePath:         "/",
 	Schemes:          []string{"http", "https"},
 	Title:            "ClearScript API Gateway",
 	Description:      "This is a Go-based API gateway for ClearScript application.",

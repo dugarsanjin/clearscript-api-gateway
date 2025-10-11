@@ -1,4 +1,4 @@
-basePath: /clearscript-api-gateway
+basePath: /
 definitions:
   handlers.Author:
     properties:
