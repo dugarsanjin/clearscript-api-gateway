@@ -21,6 +21,7 @@ import (
 	_ "clearscript-api-gateway/docs"
 	"clearscript-api-gateway/internal/config"
 	"clearscript-api-gateway/internal/http/handlers"
+	mwCors "clearscript-api-gateway/internal/http/middleware/cors"
 	mwLogger "clearscript-api-gateway/internal/http/middleware/logger"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -50,6 +51,7 @@ func main() {
 	router.Use(mwLogger.New(log))
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
+	router.Use(mwCors.New())
 
 	userHandler := handlers.NewUserHandler(log)
 	contentHandler := handlers.NewContentHandler(log)
