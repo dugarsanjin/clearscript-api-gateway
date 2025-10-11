@@ -14,7 +14,7 @@
 //
 // @BasePath  /clearscript-api-gateway
 //
-// @schemes   http https
+// @schemes   https
 
 package main
 
